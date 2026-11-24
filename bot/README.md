@@ -4,19 +4,50 @@
 фамилию и телефон, затем подтверждает запись. Все записи хранятся в SQLite
 (`bookings.db`).
 
-## Установка и запуск
+## Установка и запуск (локально)
 
 ```bash
 pip install -r requirements.txt
+# создайте .env рядом с config.py (шаблон — .env.example) и впишите BOT_TOKEN
+cp .env.example .env
 python main.py
 ```
+
+## Деплой на PythonAnywhere (бесплатно, 24/7)
+
+Боту нужен всегда включённый сервер. PythonAnywhere: бесплатно, без карты,
+`api.telegram.org` доступен даже на free-аккаунте, VPN не нужен.
+
+1. Зарегистрируйтесь на [pythonanywhere.com](https://www.pythonanywhere.com) (Free).
+2. В консоли (Tabs → Bash):
+   ```bash
+   git clone https://github.com/ВАШ_ЛОГИН/1abeilnossttt.git
+   cd 1abeilnossttt/bot
+   pip install --user -r requirements.txt
+   cp .env.example .env
+   nano .env            # впишите BOT_TOKEN и ADMIN_IDS
+   python main.py       # проверка: должна появиться строка "Start polling"
+   # Ctrl+C — остановить проверку
+   ```
+3. Откройте **Tasks → Scheduled Tasks → Add a new scheduled task**:
+   - Command: `bash /home/ВАШ_ЛОГИН/1abeilnossttt/bot/keepalive.sh`
+   - Frequency: **Hourly**
+   - В `keepalive.sh` замените `YOURNAME` на ваш логин.
+   
+   Это автоматически поднимает бота после еженедельной перезагрузки сервера
+   (на free-тарифе консоли раз в неделю гаснут; простой — не больше часа).
+4. Для запуска прямо сейчас: Web/Files не нужны — просто выполните в консоли
+   `nohup python main.py >> bot.log 2>&1 &` (или оставьте консоль открытой).
+
+Логи: `bot.log` в папке проекта. Записи клиентов: `bookings.db` на сервере —
+это единственный источник данных после переезда (локальные не синхронизируются).
 
 ## Настройка (файл `config.py`)
 
 | Параметр | Описание |
 |---|---|
-| `BOT_TOKEN` | Токен бота от @BotFather |
-| `ADMIN_IDS` | Ваш Telegram ID (узнать: написать боту @userinfobot) — для уведомлений о записях и команд мастера |
+| `BOT_TOKEN` | **В `.env`** (не в коде!) — токен бота от @BotFather |
+| `ADMIN_IDS` | **В `.env`** — ваш Telegram ID через запятую (узнать: @userinfobot) |
 | `MASTER_NAME`, `MASTER_CONTACT` | Имя и контакт мастера в приветствии |
 | `PRICES` | Прайс-лист: услуга → цена в ₽ (кнопки строятся из него) |
 | `WORK_START_HOUR` / `WORK_END_HOUR` / `SLOT_HOURS` | Рабочие часы и длительность слота (по умолчанию 10:00–19:00, шаг 2 ч) |
@@ -31,7 +62,7 @@ python main.py
 Карточка выглядит так и дозаполняется по шагам:
 
 ```
-💅 Запись к мастеру Мастер (@kylonil)
+💅 Запись к мастеру Анастасия (@kkkarta)
 
 1. Услуга:  Маникюр + покрытие гель-лак — 2500 ₽ ✅
 2. Дата:    5 декабря, суббота ✅
