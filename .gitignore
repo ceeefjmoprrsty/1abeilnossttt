@@ -1,0 +1,25 @@
+# Байт-код Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+
+# Базы данных
+*.db
+
+# Локальные конфиги с секретами (токены, пароли)
+.env
+
+# Поиск прокси
+_find_proxy.py
+
+# Диагностические скрипты
+_diag.py
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
